@@ -29,7 +29,7 @@ public class User {
 
     private String body;
 
-    private String major;
+    private String lecture;
 
     private String interest;
 
