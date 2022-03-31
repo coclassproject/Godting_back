@@ -1,6 +1,7 @@
 package com.gts.godting.config.oauth2;
 
 import com.gts.godting.config.oauth2.provider.GoogleUserInfo;
+import com.gts.godting.config.oauth2.provider.KakaoUserInfo;
 import com.gts.godting.config.oauth2.provider.NaverUserInfo;
 import com.gts.godting.config.oauth2.provider.OAuth2UserInfo;
 import com.gts.godting.user.User;
@@ -24,7 +25,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("redirect 됬을때 이게 나오나?");
         OAuth2User oAuth2User = super.loadUser(userRequest);
         OAuth2UserInfo oAuth2UserInfo = null;
 
@@ -52,7 +52,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if (flatForm.equals("naver")) {
             return new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         } else if (flatForm.equals("kakao")) {
-            return new NaverUserInfo(oAuth2User.getAttributes());
+            return new KakaoUserInfo(oAuth2User.getAttributes());
         }else{
             throw new OAuth2AuthenticationException("잘못된 provider");
         }
