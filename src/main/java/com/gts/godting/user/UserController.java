@@ -1,15 +1,22 @@
 package com.gts.godting.user;
 
+import com.gts.godting.user.form.SignUpForm;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
 
     @Value("${auth.login}")
     private String loginUrl;
@@ -29,4 +36,27 @@ public class UserController {
         response.sendRedirect(loginUrl + "/google");
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "회원가입 리다이렉트 테스트";
+    }
+
+    @PostMapping("/test/send-email")
+    public ResponseEntity sendEmailCheck(@RequestParam String email) {
+        userService.sendEmail(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/test/check-email")
+    public ResponseEntity validateEmailCheck(@RequestParam String emailCheckToken) throws TimeoutException {
+        userService.processEmailCheck(emailCheckToken);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity registerUser(@RequestBody SignUpForm signUpForm){
+        log.info("{}, {}, {}", signUpForm.getEmail(), signUpForm.getNickname(), signUpForm.getOauth2Id());
+        userService.saveNewUser(signUpForm);
+        return ResponseEntity.ok().build();
+    }
 }
