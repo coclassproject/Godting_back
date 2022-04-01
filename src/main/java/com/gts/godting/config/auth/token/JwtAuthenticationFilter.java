@@ -1,4 +1,4 @@
-package com.gts.godting.config;
+package com.gts.godting.config.auth.token;
 
 import org.springframework.web.filter.GenericFilterBean;
 
