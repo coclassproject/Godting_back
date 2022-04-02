@@ -4,7 +4,6 @@ import com.gts.godting.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 
 @Entity
 public class Profile {
