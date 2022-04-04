@@ -35,7 +35,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         return new PrincipalDetails(user, oAuth2UserInfo);
     }
-
+    
     private User getUser(OAuth2UserInfo oAuth2UserInfo) {
         String provider = oAuth2UserInfo.getProvider();
         String provider_id = oAuth2UserInfo.getProviderId();
