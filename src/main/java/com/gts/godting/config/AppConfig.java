@@ -13,6 +13,8 @@ public class AppConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true)
                 .setSourceNameTokenizer(NameTokenizers.UNDERSCORE)
                 .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE);
         return modelMapper;
