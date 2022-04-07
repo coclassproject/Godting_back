@@ -1,6 +1,7 @@
 package com.gts.godting.user;
 
 import com.gts.godting.profile.Profile;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,6 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Builder @Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class User {
 
     @Id @GeneratedValue
@@ -20,14 +23,11 @@ public class User {
 
     private String region;
 
-    private double height;
+    private int height;
 
-    @Column(unique = true)
     private int studentNum;
 
     private int age;
-
-    private String body;
 
     private String lecture;
 
@@ -42,16 +42,15 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Profile> profiles = new HashSet<>();
 
-    private String provider;
-
-    private String provider_id;
+    @Column(unique = true)
+    private String oauth2Id;
 
     @Column(unique = true)
     private String email;
 
-    private String emailCheckToken;
-
-    private LocalDateTime emailCheckTokenGeneratedAt;
-
     private LocalDateTime create_date_time;
+
+    public void completeSignUp() {
+        this.create_date_time = LocalDateTime.now();
+    }
 }
