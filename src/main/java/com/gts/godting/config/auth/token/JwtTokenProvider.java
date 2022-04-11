@@ -1,5 +1,6 @@
 package com.gts.godting.config.auth.token;
 
+import com.gts.godting.config.auth.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +8,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -15,15 +20,16 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenProvider {
 
-    @Value("${Jwt-Secret-Key}")
+    @Value("${jwt.secret.key}")
     private String secretKey;
 
     private long accessTokenValidTime = 1000L * 60L * 60L; // 1시간
-    private long refreshTokenValidTime = 1000L * 60L * 60L * 24L * 30L; // 4주(1달)
+    private long refreshTokenValidTime = 1000L * 60L * 60L * 24L * 30L; // 30일(1달)
 
-    public JwtToken createToken(String uid, String email) {
-        Claims claims = Jwts.claims().setSubject(uid);
-        claims.put("email", email);
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public JwtToken createToken(String email) {
+        Claims claims = Jwts.claims().setSubject(email);
 
         Date date = new Date();
 
@@ -60,5 +66,18 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("X-AUTH-TOKEN");
+    }
+
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserEmail(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public String getUserEmail(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

@@ -16,6 +16,8 @@ public class User {
     @Id @GeneratedValue
     private Long id;
 
+    private String password;
+
     @Column(unique = true)
     private String nickname;
 
