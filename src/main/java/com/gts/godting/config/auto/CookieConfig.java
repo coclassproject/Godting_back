@@ -11,6 +11,7 @@ public class CookieConfig {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        cookie.setSecure(true);
         cookie.setMaxAge(Long.valueOf(cookieValidTime).intValue());
         return cookie;
     }
