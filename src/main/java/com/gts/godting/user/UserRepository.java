@@ -6,6 +6,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByOauth2Id(String oauthId);
 
+    User findByEmail(String email);
+
     boolean existsByEmail(String email);
 
     boolean existsByNickname(String nickname);

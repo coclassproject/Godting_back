@@ -9,12 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Builder @Getter
+@Builder @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class User {
 
     @Id @GeneratedValue
     private Long id;
+
+    private String password;
 
     @Column(unique = true)
     private String nickname;
@@ -58,4 +60,5 @@ public class User {
         this.profiles.add(profile);
         profile.setUser(this);
     }
+
 }

@@ -1,5 +1,8 @@
 package com.gts.godting.user;
 
+import com.gts.godting.config.redis.RedisUtil;
+import com.gts.godting.mail.EmailMessage;
+import com.gts.godting.mail.MailService;
 import com.gts.godting.config.FileHandler;
 import com.gts.godting.config.redis.RedisUtil;
 import com.gts.godting.mail.EmailMessage;
@@ -10,6 +13,7 @@ import com.gts.godting.user.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -55,6 +59,7 @@ public class UserService {
         }
     }
 
+    public void saveNewUser(SignUpForm signUpForm) {
     public void saveNewUser(SignUpForm signUpForm) throws IOException {
 
         if (!signUpForm.getEmailCheck()) {
