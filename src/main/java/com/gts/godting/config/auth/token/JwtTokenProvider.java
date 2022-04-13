@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -18,6 +19,7 @@ import java.util.Date;
 
 @PropertySource("classpath:application-dev.properties")
 @Slf4j
+@RequiredArgsConstructor
 public class JwtTokenProvider {
 
     @Value("${jwt.secret.key}")
@@ -28,27 +30,29 @@ public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtToken createToken(String email) {
+    public String createToken(String email, Long tokenValidTime) {
         Claims claims = Jwts.claims().setSubject(email);
 
         Date date = new Date();
 
         log.info("토큰 생성");
-        return new JwtToken(
-                Jwts.builder()
+        return Jwts.builder()
                         .setClaims(claims)
                         .setIssuedAt(date)
-                        .setExpiration(new Date(date.getTime() + accessTokenValidTime))
+                        .setExpiration(new Date(date.getTime() + tokenValidTime))
                         .signWith(SignatureAlgorithm.HS256, secretKey)
-                        .compact(),
-                Jwts.builder()
-                        .setClaims(claims)
-                        .setIssuedAt(date)
-                        .setExpiration(new Date(date.getTime() + refreshTokenValidTime))
-                        .signWith(SignatureAlgorithm.HS256, secretKey)
-                        .compact());
+                        .compact();
 
     }
+
+    public String accessToken(String email) {
+        return createToken(email, accessTokenValidTime);
+    }
+
+    public String refreshToken(String email) {
+        return createToken(email, refreshTokenValidTime);
+    }
+
 
     public boolean verifyToken(String token) {
         try {
@@ -64,8 +68,8 @@ public class JwtTokenProvider {
         }
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+    public String resolveToken(HttpServletRequest request, String tokenName) {
+        return request.getHeader("X-AUTH-" + tokenName + "-TOKEN");
     }
 
     public Authentication getAuthentication(String token) {

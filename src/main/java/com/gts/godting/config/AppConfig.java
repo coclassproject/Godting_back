@@ -22,8 +22,13 @@ public class AppConfig {
     }
 
     @Bean
+    public UserDetailsServiceImpl userDetailsServiceImpl() {
+        return new UserDetailsServiceImpl();
+    }
+
+    @Bean
     public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider();
+        return new JwtTokenProvider(userDetailsServiceImpl());
     }
 
 }
