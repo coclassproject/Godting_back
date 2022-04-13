@@ -55,4 +55,10 @@ public class User {
     public void completeSignUp() {
         this.create_date_time = LocalDateTime.now();
     }
+
+    public void addProfile(Profile profile) {
+        this.profiles.add(profile);
+        profile.setUser(this);
+    }
+
 }

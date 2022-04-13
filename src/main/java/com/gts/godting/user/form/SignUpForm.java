@@ -1,10 +1,14 @@
 package com.gts.godting.user.form;
 
 import lombok.Getter;
-
+import java.util.Set;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 import java.util.Set;
 
-@Getter
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class SignUpForm {
 
     private String email;
@@ -36,4 +40,6 @@ public class SignUpForm {
     private String oauth2Id;
 
     //TODO 이미지
+    private List<MultipartFile> profiles;
+
 }

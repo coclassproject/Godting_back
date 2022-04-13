@@ -38,6 +38,3 @@ out/
 
 ## dev property
 src/main/resources/application-dev.properties
-
-## secret key
-src/main/java/com/gts/godting/config/KeyConfig.java

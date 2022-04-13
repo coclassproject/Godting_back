@@ -3,15 +3,26 @@ package com.gts.godting.user;
 import com.gts.godting.config.redis.RedisUtil;
 import com.gts.godting.mail.EmailMessage;
 import com.gts.godting.mail.MailService;
+import com.gts.godting.config.FileHandler;
+import com.gts.godting.config.redis.RedisUtil;
+import com.gts.godting.mail.EmailMessage;
+import com.gts.godting.mail.MailService;
+import com.gts.godting.profile.Profile;
+import com.gts.godting.profile.ProfileRepository;
 import com.gts.godting.user.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
@@ -19,6 +30,8 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final RedisUtil redisUtil;
     private final MailService mailService;
+    private final FileHandler fileHandler;
+    private final ProfileRepository profileRepository;
 
     public void sendEmail(String email) {
         boolean emailCheck = userRepository.existsByEmail(email);
@@ -47,6 +60,12 @@ public class UserService {
     }
 
     public void saveNewUser(SignUpForm signUpForm) {
+    public void saveNewUser(SignUpForm signUpForm) throws IOException {
+
+        if (!signUpForm.getEmailCheck()) {
+            throw new RuntimeException("이메일 인증 안됨");
+        }
+
         boolean emailCheck = userRepository.existsByEmail(signUpForm.getEmail());
         if (emailCheck) {
             throw new RuntimeException("이미 사용중인 이메일");
@@ -57,6 +76,14 @@ public class UserService {
         }
         User user = modelMapper.map(signUpForm, User.class);
         user.completeSignUp();
+
+        List<Profile> profileList = fileHandler.parseFile(signUpForm.getProfiles());
+        if (!profileList.isEmpty()) {
+            for (Profile profile : profileList) {
+                user.addProfile(profileRepository.save(profile));
+            }
+        }
+
         userRepository.save(user);
     }
 }

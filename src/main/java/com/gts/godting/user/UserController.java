@@ -54,7 +54,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@RequestBody SignUpForm signUpForm){
+
+    public ResponseEntity registerUser(SignUpForm signUpForm) throws IOException {
         log.info("{}, {}, {}", signUpForm.getEmail(), signUpForm.getNickname(), signUpForm.getOauth2Id());
         userService.saveNewUser(signUpForm);
         return ResponseEntity.ok().build();
