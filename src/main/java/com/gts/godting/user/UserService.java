@@ -59,7 +59,6 @@ public class UserService {
         }
     }
 
-    public void saveNewUser(SignUpForm signUpForm) {
     public void saveNewUser(SignUpForm signUpForm) throws IOException {
 
         if (!signUpForm.getEmailCheck()) {

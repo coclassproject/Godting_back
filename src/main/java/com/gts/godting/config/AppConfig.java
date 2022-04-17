@@ -2,6 +2,9 @@ package com.gts.godting.config;
 
 import com.gts.godting.config.auth.UserDetailsServiceImpl;
 import com.gts.godting.config.auth.token.JwtTokenProvider;
+import com.gts.godting.user.JpaUserRepository;
+import com.gts.godting.user.UserRepository;
+import com.gts.godting.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NameTokenizers;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +29,6 @@ public class AppConfig {
                 .setSourceNameTokenizer(NameTokenizers.UNDERSCORE)
                 .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE);
         return modelMapper;
-    }
-
-    @Bean
-    public UserDetailsServiceImpl userDetailsServiceImpl() {
-        return new UserDetailsServiceImpl();
-    }
-
-    @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider(userDetailsServiceImpl());
     }
 
 }
