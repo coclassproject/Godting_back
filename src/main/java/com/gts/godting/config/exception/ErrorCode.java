@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -17,6 +15,10 @@ public enum ErrorCode {
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰 정보가 일치하지 않습니다."),
 
     // 401 UNAUTHORIZED
+    INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
+    UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
+
+    // 404 NOT_FOUND
     MEMBER_NOT_FOUND(NOT_FOUND, "유저 정보를 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다."),
 
