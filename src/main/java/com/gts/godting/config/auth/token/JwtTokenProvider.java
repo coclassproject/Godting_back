@@ -1,6 +1,8 @@
 package com.gts.godting.config.auth.token;
 
 import com.gts.godting.config.auth.UserDetailsServiceImpl;
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +14,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +67,7 @@ public class JwtTokenProvider {
                     .getExpiration()
                     .after(new Date());
         } catch (Exception e) {
-            return false;
+            throw new CustomExcepition(ExceptionMessage.INVALID_REFRESH_TOKEN);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.gts.godting.config;
 
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import com.gts.godting.profile.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -34,7 +36,7 @@ public class FileHandler {
                 boolean createFolder = file.mkdir();
 
                 if (!createFolder) {
-                    throw new RuntimeException("폴더 생성 오류");
+                    throw new CustomExcepition(ExceptionMessage.SERVER_FILE_UPLOAD_FAILED);
                 }
             }
 

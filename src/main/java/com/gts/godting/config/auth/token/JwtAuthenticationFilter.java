@@ -4,6 +4,8 @@ package com.gts.godting.config.auth.token;
 import com.gts.godting.config.auth.UserDetailsImpl;
 import com.gts.godting.config.auth.UserDetailsServiceImpl;
 import com.gts.godting.config.auto.CookieConfig;
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,22 +34,15 @@ public class JwtAuthenticationFilter extends GenericFilter {
         String accessToken = jwtTokenProvider.resolveToken((HttpServletRequest) request, "ACCESS");
         String refreshToken = null;
 
-        try {
-            if(accessToken != null ) {
-                UserDetailsImpl userDetailsImpl = (UserDetailsImpl) userDetailsServiceImpl.loadUserByUsername(jwtTokenProvider.getUserEmail(accessToken));
-                if (jwtTokenProvider.verifyToken(accessToken)) {
-                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    refreshToken = cookieConfig.getCookie((HttpServletRequest) request, "X-AUTH-REFRESH-TOKEN").getValue();
-                }
+        if(accessToken != null) {
+            UserDetailsImpl userDetailsImpl = (UserDetailsImpl) userDetailsServiceImpl.loadUserByUsername(jwtTokenProvider.getUserEmail(accessToken));
+            if (jwtTokenProvider.verifyToken(accessToken)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                refreshToken = cookieConfig.getCookie((HttpServletRequest) request, "X-AUTH-REFRESH-TOKEN").getValue();
             }
-        } catch (ExpiredJwtException e) {
-            log.info("accessToken : ExpiredJwtException");
-        } catch (Exception e) {
-            log.info("Exception");
         }
-
 
         try {
             RefreshToken token = refreshTokenRepository.findByRefreshToken(refreshToken);
@@ -58,7 +53,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 ((HttpServletResponse) response).addHeader("X-AUTH-REFRESH-TOKEN", jwtTokenProvider.accessToken(userDetails.getUsername()));
             }
         } catch (ExpiredJwtException e) {
-            log.info("refreshToken : ExpiredJwtException");
+            log.info("refreshToken : ExpiredJwtException {}", refreshToken);
+            throw new CustomExcepition(ExceptionMessage.INVALID_REFRESH_TOKEN);
         }
 
         chain.doFilter(request, response);

@@ -1,5 +1,7 @@
 package com.gts.godting.mail;
 
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,7 +25,7 @@ public class MailService {
             mimeMessageHelper.setText(emailMessage.getMessage());
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new CustomExcepition(ExceptionMessage.SERVER_MAIL_SEND_FAILED);
         }
 
     }
