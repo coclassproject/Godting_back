@@ -26,7 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //TODO cors 설정
         http
-        http
                 .cors()
                 .configurationSource(corsConfigurationSource())
                     .and()

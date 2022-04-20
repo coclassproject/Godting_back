@@ -1,5 +1,7 @@
 package com.gts.godting.user;
 
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import com.gts.godting.config.redis.RedisUtil;
 import com.gts.godting.mail.EmailMessage;
 import com.gts.godting.mail.MailService;
@@ -37,7 +39,7 @@ public class UserService {
         boolean emailCheck = userRepository.existsByEmail(email);
         //TODO 학교 웹메일 필터
         if (emailCheck) {
-            throw new RuntimeException("이미 사용중인 이메일");
+            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_EMAIL);
         }
         String emailCheckToken = UUID.randomUUID().toString();
         String oauth2Id = (String)redisUtil.get(emailCheckToken);
@@ -59,7 +61,6 @@ public class UserService {
         }
     }
 
-    public void saveNewUser(SignUpForm signUpForm) {
     public void saveNewUser(SignUpForm signUpForm) throws IOException {
 
         if (!signUpForm.getEmailCheck()) {
@@ -68,11 +69,11 @@ public class UserService {
 
         boolean emailCheck = userRepository.existsByEmail(signUpForm.getEmail());
         if (emailCheck) {
-            throw new RuntimeException("이미 사용중인 이메일");
+            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_EMAIL);
         }
         boolean nicknameCheck = userRepository.existsByNickname(signUpForm.getNickname());
         if (nicknameCheck) {
-            throw new RuntimeException("이미 사용중인 닉네임");
+            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_NICKNAME);
         }
         User user = modelMapper.map(signUpForm, User.class);
         user.completeSignUp();
