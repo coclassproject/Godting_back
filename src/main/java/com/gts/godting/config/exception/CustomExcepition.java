@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CustomExcepition extends RuntimeException {
 
-    private final ErrorCode errorCode;
+    private final ExceptionMessage exceptionMessage;
 
 }

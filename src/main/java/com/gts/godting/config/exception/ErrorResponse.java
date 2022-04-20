@@ -14,13 +14,13 @@ public class ErrorResponse {
     private final String error;
     private final String message;
 
-    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorcode) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ExceptionMessage exceptionMessage) {
         return ResponseEntity
-                .status(errorcode.getHttpStatus().value())
+                .status(exceptionMessage.getHttpStatus().value())
                 .body(ErrorResponse.builder()
-                        .error(errorcode.getHttpStatus().name())
-                        .code(errorcode.name())
-                        .message(errorcode.getDetail())
+                        .error(exceptionMessage.getHttpStatus().name())
+                        .code(exceptionMessage.name())
+                        .message(exceptionMessage.getDetail())
                         .build());
     }
 }

@@ -1,5 +1,7 @@
 package com.gts.godting.config.oauth2;
 
+import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.ExceptionMessage;
 import com.gts.godting.config.oauth2.provider.GoogleUserInfo;
 import com.gts.godting.config.oauth2.provider.KakaoUserInfo;
 import com.gts.godting.config.oauth2.provider.NaverUserInfo;
@@ -54,7 +56,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if (flatForm.equals("kakao")) {
             return new KakaoUserInfo(oAuth2User.getAttributes());
         }else{
-            throw new OAuth2AuthenticationException("잘못된 provider");
+            throw new CustomExcepition(ExceptionMessage.OAUTH2_PROVIDER_NOT_FOUND);
         }
     }
 }
