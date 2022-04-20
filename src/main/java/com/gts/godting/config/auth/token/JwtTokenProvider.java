@@ -1,7 +1,7 @@
 package com.gts.godting.config.auth.token;
 
 import com.gts.godting.config.auth.UserDetailsServiceImpl;
-import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.CustomException;
 import com.gts.godting.config.exception.ExceptionMessage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -67,7 +67,7 @@ public class JwtTokenProvider {
                     .getExpiration()
                     .after(new Date());
         } catch (Exception e) {
-            throw new CustomExcepition(ExceptionMessage.INVALID_REFRESH_TOKEN);
+            throw new CustomException(ExceptionMessage.INVALID_REFRESH_TOKEN);
         }
     }
 

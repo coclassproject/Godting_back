@@ -1,14 +1,11 @@
 package com.gts.godting.user;
 
-import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.CustomException;
 import com.gts.godting.config.exception.ExceptionMessage;
 import com.gts.godting.config.redis.RedisUtil;
 import com.gts.godting.mail.EmailMessage;
 import com.gts.godting.mail.MailService;
 import com.gts.godting.config.FileHandler;
-import com.gts.godting.config.redis.RedisUtil;
-import com.gts.godting.mail.EmailMessage;
-import com.gts.godting.mail.MailService;
 import com.gts.godting.profile.Profile;
 import com.gts.godting.profile.ProfileRepository;
 import com.gts.godting.user.form.SignUpForm;
@@ -39,7 +36,7 @@ public class UserService {
         boolean emailCheck = userRepository.existsByEmail(email);
         //TODO 학교 웹메일 필터
         if (emailCheck) {
-            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_EMAIL);
+            throw new CustomException(ExceptionMessage.REDUPLICATION_EMAIL);
         }
         String emailCheckToken = UUID.randomUUID().toString();
         String oauth2Id = (String)redisUtil.get(emailCheckToken);
@@ -69,11 +66,11 @@ public class UserService {
 
         boolean emailCheck = userRepository.existsByEmail(signUpForm.getEmail());
         if (emailCheck) {
-            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_EMAIL);
+            throw new CustomException(ExceptionMessage.REDUPLICATION_EMAIL);
         }
         boolean nicknameCheck = userRepository.existsByNickname(signUpForm.getNickname());
         if (nicknameCheck) {
-            throw new CustomExcepition(ExceptionMessage.REDUPLICATION_NICKNAME);
+            throw new CustomException(ExceptionMessage.REDUPLICATION_NICKNAME);
         }
         User user = modelMapper.map(signUpForm, User.class);
         user.completeSignUp();

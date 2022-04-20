@@ -14,8 +14,8 @@ import static com.gts.godting.config.exception.ExceptionMessage.DUPLICATE_RESOUR
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = { CustomExcepition.class })
-    protected ResponseEntity<ErrorResponse> handleCustomException(CustomExcepition e) {
+    @ExceptionHandler(value = { CustomException.class })
+    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         log.error("Custom Exception throw Exception, {}" + DUPLICATE_RESOURCE);
         return ErrorResponse.toResponseEntity(e.getExceptionMessage());
     }
