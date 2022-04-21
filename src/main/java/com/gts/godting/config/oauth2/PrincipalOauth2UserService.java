@@ -1,6 +1,6 @@
 package com.gts.godting.config.oauth2;
 
-import com.gts.godting.config.exception.CustomExcepition;
+import com.gts.godting.config.exception.CustomException;
 import com.gts.godting.config.exception.ExceptionMessage;
 import com.gts.godting.config.oauth2.provider.GoogleUserInfo;
 import com.gts.godting.config.oauth2.provider.KakaoUserInfo;
@@ -56,7 +56,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if (flatForm.equals("kakao")) {
             return new KakaoUserInfo(oAuth2User.getAttributes());
         }else{
-            throw new CustomExcepition(ExceptionMessage.OAUTH2_PROVIDER_NOT_FOUND);
+            throw new CustomException(ExceptionMessage.OAUTH2_PROVIDER_NOT_FOUND);
         }
     }
 }
