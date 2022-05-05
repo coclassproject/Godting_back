@@ -11,14 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@Builder
-@Getter
+@Builder @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshToken {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String refreshToken;
 }
